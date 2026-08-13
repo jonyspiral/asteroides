@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Asteroides — Runtime objetivo</title>
+<style>
+:root{--ink:#17232d;--muted:#66737c;--paper:#f6f7f8;--white:#fff;--line:#d9dfe3;--navy:#17354b;--blue:#e8f1f6;--green:#eaf5ee;--amber:#fff2de;--violet:#f1edf7;--gray:#eef1f3;--shadow:0 12px 30px rgba(23,53,75,.07)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Jost","Segoe UI",Arial,sans-serif}
+.wrap{max-width:1400px;margin:auto;padding:34px 28px 48px}
+header{display:flex;justify-content:space-between;gap:28px;align-items:end;margin-bottom:22px}
+h1{margin:0;font-size:42px;letter-spacing:-.03em;color:var(--navy)}
+.sub{color:var(--muted);font-size:16px;margin-top:6px}
+.legend{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.badge{font-size:11px;font-weight:700;border-radius:999px;padding:6px 9px;border:1px solid var(--line);background:white}
+.flow{display:grid;grid-template-columns:170px 1fr 44px 1fr 44px 1.15fr 44px 1.15fr;gap:10px;align-items:stretch}
+.coltitle{font-size:11px;text-transform:uppercase;letter-spacing:.09em;font-weight:700;color:var(--muted);padding:0 4px 8px}
+.lane{display:grid;gap:10px}
+.card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+.card h3{font-size:17px;margin:0 0 7px;color:var(--navy)}
+.card p{font-size:12.5px;line-height:1.4;color:var(--muted);margin:0}
+.card ul{margin:8px 0 0;padding-left:17px;font-size:12.5px;color:#45545e}
+.card li+li{margin-top:4px}
+.core{background:var(--violet)}
+.control{background:var(--green)}
+.agent{background:var(--blue)}
+.exec{background:var(--amber)}
+.runtime{background:var(--gray)}
+.durable{background:#f8f8f4}
+.target{border-style:dashed}
+.arrow{display:flex;align-items:center;justify-content:center;color:#7b8790;font-size:28px;font-weight:300}
+.vertical{height:24px;text-align:center;color:#8a959d;font-size:22px}
+.user{background:var(--navy);color:white;border:none}
+.user h3,.user p{color:white}.user p{opacity:.78}
+.route{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.route .card{min-height:210px}
+.ribbon{margin-top:18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.ribbon .card{min-height:110px}
+.footerflow{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px 20px;box-shadow:var(--shadow)}
+.footerflow h3{margin:0 0 9px;font-size:16px;color:var(--navy)}
+.chain{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px}
+.step{background:#f7f8f9;border:1px solid var(--line);border-radius:999px;padding:7px 10px}
+.chev{color:#8c969d}
+.note{margin-top:18px;padding:15px 18px;border-left:4px solid var(--navy);background:#fff;border-radius:0 14px 14px 0;color:#46555f;font-size:13.5px}
+small.k{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#7c8992;margin-bottom:5px;font-weight:700}
+@media(max-width:1050px){.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg);height:28px}header{display:block}.legend{justify-content:flex-start;margin-top:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <small class="k">Esquema sinóptico</small>
+    <h1>ASTEROIDES · Runtime objetivo</h1>
+    <div class="sub">Contexto → gobierno → razonamiento → ejecución → runtime → evidencia → reconciliación</div>
+  </div>
+  <div class="legend">
+    <span class="badge">Sólido: componente operativo</span>
+    <span class="badge">Punteado: objetivo en consolidación</span>
+  </div>
+</header>
+
+<div class="flow">
+  <div class="lane">
+    <div class="coltitle">Entrada</div>
+    <div class="card user"><h3>Humano / Producto</h3><p>Objetivo, problema, decisión y autorización.</p></div>
+    <div class="card"><h3>Canales de acceso</h3><ul><li>ChatGPT</li><li>Codex / Claude</li><li>Console futura</li><li>API / automatización</li></ul></div>
+  </div>
+
+  <div class="lane">
+    <div class="coltitle">Contexto</div>
+    <div class="card core target"><h3>Asteroides Core</h3><p>Proyecto madre y grafo de contexto.</p><ul><li>Proyectos y relaciones</li><li>Herencia / decisiones</li><li>Responsabilidades</li><li>Capabilities declaradas</li><li>Runtimes / recursos</li></ul></div>
+    <div class="card durable"><h3>Contexto efectivo</h3><p>Core + proyecto + rector + Work Unit + sesión.</p></div>
+  </div>
+
+  <div class="arrow">→</div>
+
+  <div class="lane">
+    <div class="coltitle">Control</div>
+    <div class="card control"><h3>Project Control MCP</h3><ul><li>Rector / plan</li><li>Work Unit / execution</li><li>Claim / conflictos</li><li>Autorización / scope</li><li>Routing</li><li>nextStep</li><li>Reconciliación</li></ul></div>
+    <div class="card control"><h3>Harness del proyecto</h3><p>Contrato local que Project Control y el agente deben respetar.</p><ul><li>Gates y riesgos</li><li>Paths reservados</li><li>Checks / tests</li><li>Capabilities locales</li></ul></div>
+  </div>
+
+  <div class="arrow">→</div>
+
+  <div class="lane">
+    <div class="coltitle">Razonamiento</div>
+    <div class="card agent"><h3>Agente / Modelo</h3><p>ChatGPT, OpenAI Codex, Claude u otro modelo reemplazable.</p><ul><li>Analiza contexto</li><li>Diseña solución</li><li>Programa / prueba</li><li>Solicita tool autorizada</li><li>No posee autoridad propia</li></ul></div>
+    <div class="card durable"><h3>GitHub</h3><p>Registro durable de Issues, Work Units, ramas, PR, SHA, checks y releases.</p></div>
+  </div>
+
+  <div class="arrow">→</div>
+
+  <div class="lane">
+    <div class="coltitle">Routing y efectos</div>
+    <div class="route">
+      <div class="card exec"><h3>Ruta interna</h3><p><strong>Asteroides Executor MCP</strong></p><ul><li>Operaciones allowlisted</li><li>Sin shell genérico</li><li>Privilegios mínimos</li><li>Receipts durables</li></ul></div>
+      <div class="card exec"><h3>Ruta externa</h3><p><strong>MCP / adaptador específico</strong></p><ul><li>GitHub</li><li>Cloudflare</li><li>Vercel</li><li>Google / Drive</li><li>ManyChat / WhatsApp</li><li>Mercado Libre / PrestaShop</li></ul></div>
+    </div>
+
+    <div class="vertical">↓</div>
+
+    <div class="route">
+      <div class="card runtime"><h3>Runtimes propios</h3><ul><li>Ubuntu / Proxmox</li><li>KOI / KOI2</li><li>DB / servicios</li><li>systemd / jobs</li><li>filesystems / storage</li></ul></div>
+      <div class="card runtime"><h3>Runtimes terceros</h3><ul><li>Cloud / PaaS</li><li>SaaS</li><li>Marketplaces</li><li>Mensajería</li><li>APIs externas</li></ul></div>
+    </div>
+  </div>
+</div>
+
+<div class="ribbon">
+  <div class="card durable"><h3>Evidencia</h3><p>Receipt · logs · PR · SHA · test · deployment · rollback · métricas.</p></div>
+  <div class="card control"><h3>Reconciliación</h3><p>Project Control vuelve a leer el estado real y reconstruye la Work Unit sin ejecutar otra vez.</p></div>
+  <div class="card core target"><h3>Aprendizaje / contexto</h3><p>Decisiones durables y contexto relevante pueden volver al Core sin convertirlo en memoria automática sin control.</p></div>
+</div>
+
+<div class="footerflow">
+  <h3>Flujo principal</h3>
+  <div class="chain">
+    <span class="step">1 · Objetivo</span><span class="chev">→</span>
+    <span class="step">2 · Resolver contexto</span><span class="chev">→</span>
+    <span class="step">3 · Rector / Work Unit</span><span class="chev">→</span>
+    <span class="step">4 · Autorizar</span><span class="chev">→</span>
+    <span class="step">5 · Agente razona</span><span class="chev">→</span>
+    <span class="step">6 · Project Control enruta</span><span class="chev">→</span>
+    <span class="step">7 · Executor / MCP actúa</span><span class="chev">→</span>
+    <span class="step">8 · Receipt</span><span class="chev">→</span>
+    <span class="step">9 · Reconciliar</span>
+  </div>
+</div>
+
+<div class="note">
+  <strong>Principio rector:</strong> Asteroides Core sabe <em>qué es y cómo se relaciona</em> cada elemento; Project Control sabe <em>qué se está haciendo y hasta dónde está autorizado</em>; Harness define <em>cómo debe hacerse dentro de cada proyecto</em>; el agente razona; y Executor/MCP materializa el efecto en el runtime correcto.
+</div>
+</div>
+</body>
+</html>

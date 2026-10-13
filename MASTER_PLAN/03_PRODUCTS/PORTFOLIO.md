@@ -11,6 +11,11 @@ Atención conversacional profesional con IA, bandeja humana, contexto, handoff, 
 ## Asteroides Commerce Ops
 Operación de catálogo, stock, ecommerce, marketplaces, pedidos y reconciliación. Piloto natural: Spiral Shoes / KOI2.
 
+## Asteroides Pricing Engine
+Estrategia de precios y rentabilidad multicanal: simulación de precio web, mayorista (incluida comisión de vendedor), promociones, margen del revendedor, costos de adquisición y pisos económicos. Su primera versión es un simulador en Sheets, validado con DORSO, con aprobación humana antes de publicar cualquier precio. Ofertas: Pricing Audit, Pricing Architecture y Pricing Performance.
+
+Ficha de producto: [ASTEROIDES_PRICING_ENGINE.md](./ASTEROIDES_PRICING_ENGINE.md). Rector: [#11](https://github.com/jonyspiral/asteroides/issues/11).
+
 ## Asteroides Growth / Ads Ops
 Salud de campañas, alertas, relación con negocio, recomendaciones y acciones aprobadas. Pilotos naturales: Spiral Shoes y Cumbres & Mareas.
 

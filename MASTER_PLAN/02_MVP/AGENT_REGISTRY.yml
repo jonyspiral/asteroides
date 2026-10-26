@@ -1,0 +1,50 @@
+# ASTEROIDES — identidades operativas de roles (no identidades de seguridad)
+# Registro público. No agregar URLs privadas de ChatGPT/Claude, secretos ni tokens.
+schema: "asteroides/agent-registry/v1"
+updated: "2026-10-26"
+rector: "jonyspiral/asteroides#1"
+decision: "MASTER_PLAN/04_DECISIONS/ADR-0001-main-ing-colaboracion.md"
+binding_semantics: "ROLE_ID define función; THREAD_REF es alias lógico propuesto, NO ID nativo ni autenticación"
+roles:
+  - role_id: "AST-MVP-MAIN"
+    function: "Arquitectura y coherencia global del ecosistema Asteroides"
+    rector_ref: "jonyspiral/asteroides#1"
+    responsible_for: "Alineación Core, Harness, PC, Executor, plataformas y subproductos"
+    platform_declared: "ChatGPT"
+    model_declared: null
+    threads:
+      - thread_ref: "AST-MVP-MAIN-01"
+        binding_status: "pending_confirmation"
+        note: "Alias propuesto para el hilo ASTEROIDES MVP; no contiene URL de conversación"
+
+  - role_id: "PC-ING"
+    function: "Ingeniería e implementación de Project Control MCP"
+    rector_ref: "jonyspiral/project-control-mcp#183"
+    master_ref: "jonyspiral/project-control-mcp#1"
+    responsible_for: "Código, pruebas, releases y evidencia técnica de PC dentro de autorización"
+    platform_declared: "Claude"
+    model_declared: "Opus 5.5 (informado por OWNER)"
+    threads:
+      - thread_ref: "PC-ING-01"
+        binding_status: "pending_confirmation"
+        note: "Alias propuesto, pendiente vinculación por el agente/hilo existente"
+
+  - role_id: "GROWTH-MAIN"
+    function: "Dirección integral de Asteroides Growth y sus ingenieros"
+    rector_ref: "jonyspiral/asteroides-growth#1"
+    responsible_for: "Priorización, delegación y aceptación de Growth"
+    platform_declared: null
+    model_declared: null
+    threads:
+      - thread_ref: "GROWTH-MAIN-01"
+        binding_status: "pending_confirmation"
+
+  - role_id: "SERVER-MAIN"
+    function: "Dirección integral de Asteroides Server y su migración"
+    rector_ref: "jonyspiral/asteroides-server#1"
+    responsible_for: "Coordinar seguridad, migración, dependencias, ING y evidencias"
+    platform_declared: null
+    model_declared: null
+    threads:
+      - thread_ref: "SERVER-MAIN-01"
+        binding_status: "pending_confirmation"

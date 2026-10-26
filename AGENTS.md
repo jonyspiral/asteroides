@@ -9,21 +9,11 @@ Este repositorio es el **proyecto madre del ecosistema Asteroides**, no un execu
 3. Rector global `jonyspiral/asteroides#1`, rector del dominio y TaskRef activo en GitHub.
 4. Harness y contratos locales **del proyecto donde realmente se ejecuta**. No recorrer todo el historial.
 
-## Identidad operativa del hilo (antes de trabajar)
+## Identidad operativa del hilo — sólo cuando cambia
 
-Para las conversaciones que actúen en el programa Asteroides, consultar primero
-`MASTER_PLAN/02_MVP/AGENT_REGISTRY.yml` y
-`MASTER_PLAN/02_MVP/THREAD_IDENTITY.md`. El hilo recibe un mini prompt
-desde `MASTER_PLAN/02_MVP/THREAD_STARTER.md` con `ROLE_ID` (función),
-`THREAD_REF` (alias lógico no autenticante) y el rector correspondiente.
-`TASK_REF` se resuelve desde la Work Unit vigente en GitHub; no inferirlo
-del modelo, nombre de chat o rector.
+Si el mini prompt del hilo ya declara `ROLE_ID` y `THREAD_REF`, **reutilizarlos sin nuevas lecturas**. Sólo al crear/cambiar de hilo o rol, y si falta identidad, consultar una vez [AGENT_REGISTRY.yml](MASTER_PLAN/02_MVP/AGENT_REGISTRY.yml) o [THREAD_IDENTITY.md](MASTER_PLAN/02_MVP/THREAD_IDENTITY.md), y asignar el mini prompt de [THREAD_STARTER.md](MASTER_PLAN/02_MVP/THREAD_STARTER.md). Son alias, no credenciales. `TASK_REF` se verifica en GitHub **cuando exista una Work Unit real**.
 
-En el primer mensaje operativo o al cambiar de tarea, declarar
-`ROLE_ID / THREAD_REF / RECTOR_REF / TASK_REF / GOAL`. No reiterar esta cabecera
-por cada respuesta. Si falta un binding, marcarlo `pending_confirmation`;
-no atribuir a otro hilo una identidad ni permisos. Este repositorio es público:
-nunca guardar URLs privadas de conversaciones o secretos en el registro.
+No añadir consultas de registry, llamadas MCP, verificación de identidad, cabeceras repetidas ni pasos de coordinación a tareas normales. No almacenar URLs privadas de conversaciones en este repo público.
 
 ## MAIN / ING obligatorio para rectores
 

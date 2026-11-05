@@ -1,8 +1,9 @@
 # Brand Context v1
 
 `MASTER_PLAN/02_MVP/BRAND_SOURCES.json` binds explicit `brand://` identities to
-reviewed Git commits and source-file bytes. The offline builder reads those Git
-objects locally, validates each brand using its pinned native validator, then
+reviewed Git commits and source-file bytes. The offline builder requires an
+exact-HEAD checkout with the pinned files unmodified (ordinary Git CRLF
+conversion is accepted), reads those Git objects locally, validates each brand using its pinned native validator, then
 projects them to `asteroides/brand-context/v1`. It never fetches a URL or calls
 a provider. A new brand needs an explicit catalog pin and a reviewed profile
 adapter; a free-form repository or URL supplied by a request is rejected.

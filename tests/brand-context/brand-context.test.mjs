@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { build, canonicalBytes, loadCatalog, validateRequest, verifyArtifact } from '../../scripts/brand-context/brand-context.mjs';
+import { build, canonicalBytes, loadCatalog, validateRequest, verifyArtifact, verifyWorktreeBytes } from '../../scripts/brand-context/brand-context.mjs';
 
 const asOf = '2026-11-05T12:00:00Z';
 const fixtures = [
@@ -60,6 +60,13 @@ test('invalid date, brand and product references are rejected', () => {
   assert.throws(() => validateRequest({ brand_ref: 'brand://dorso', as_of: asOf, sections: ['arbitrary'] }), /INVALID_SECTIONS/);
 });
 
+test('checkout bytes permit only the Git LF-to-CRLF conversion', () => {
+  const pinned = Buffer.from('alpha\nbeta\n');
+  assert.doesNotThrow(() => verifyWorktreeBytes(pinned, pinned));
+  assert.doesNotThrow(() => verifyWorktreeBytes(Buffer.from('alpha\r\nbeta\r\n'), pinned));
+  assert.throws(() => verifyWorktreeBytes(Buffer.from('alpha\nbeta changed\n'), pinned), /SOURCE_WORKTREE_MISMATCH/);
+});
+
 const roots = { 'brand://spiral': process.env.BRAND_SPIRAL_ROOT, 'brand://dorso': process.env.BRAND_DORSO_ROOT };
 test('two clean builds reproduce the golden bytes and digests', { skip: !roots['brand://spiral'] || !roots['brand://dorso'] }, async () => {
   for (const [name, brand_ref, product_ref] of fixtures) {
@@ -74,6 +81,9 @@ test('two clean builds reproduce the golden bytes and digests', { skip: !roots['
   await assert.rejects(build({ brand_ref: 'brand://dorso', as_of: asOf, product_ref: 'product:spiral/ymodel-2' }, roots), /UNRESOLVED_PRODUCT/);
   await assert.rejects(build({ brand_ref: 'brand://spiral', as_of: asOf, product_ref: 'product:spiral/ymodel' }, roots), /UNRESOLVED_PRODUCT/);
   await assert.rejects(build({ brand_ref: 'brand://unknown', as_of: asOf }, roots), /UNAVAILABLE_BRAND/);
+  if (process.env.BRAND_SPIRAL_WRONG_HEAD_ROOT) {
+    await assert.rejects(build({ brand_ref: 'brand://spiral', as_of: asOf }, { ...roots, 'brand://spiral': process.env.BRAND_SPIRAL_WRONG_HEAD_ROOT }), /SOURCE_CHECKOUT_MISMATCH/);
+  }
   const catalog = await loadCatalog();
   const altered = structuredClone(catalog);
   altered.sources[0].required_files[0].sha256 = '0'.repeat(64);

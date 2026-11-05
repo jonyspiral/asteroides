@@ -1,8 +1,9 @@
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
+import { readFileSync, realpathSync } from 'node:fs';
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
 
 const catalogPath = fileURLToPath(new URL('../../MASTER_PLAN/02_MVP/BRAND_SOURCES.json', import.meta.url));
 const allowedSections = new Set(['identity', 'positioning', 'purpose', 'personality', 'voice', 'audiences', 'content', 'products', 'commercial_rules', 'content_pillars', 'campaign_playbook', 'references', 'assets']);
@@ -17,6 +18,11 @@ export function canonical(value) {
 }
 
 export const canonicalBytes = value => Buffer.from(`${JSON.stringify(canonical(value))}\n`, 'utf8');
+
+export function verifyWorktreeBytes(worktree, pinnedBlob) {
+  const normalized = Buffer.from(worktree.toString('utf8').replace(/\r\n/g, '\n'), 'utf8');
+  if (!worktree.equals(pinnedBlob) && !normalized.equals(pinnedBlob)) throw new Error('SOURCE_WORKTREE_MISMATCH');
+}
 
 export function validateRequest(request) {
   if (!plain(request) || !/^brand:\/\/[a-z][a-z0-9-]*$/.test(request.brand_ref ?? '')) throw new Error('INVALID_BRAND_REF');
@@ -37,6 +43,9 @@ function git(root, ...args) {
 }
 
 function sourceBytes(entry, root) {
+  const checkout = realpathSync(root);
+  if (realpathSync(git(root, 'rev-parse', '--show-toplevel').toString('utf8').trim()) !== checkout ||
+      git(root, 'rev-parse', 'HEAD').toString('utf8').trim() !== entry.commit) throw new Error('SOURCE_CHECKOUT_MISMATCH');
   const origin = git(root, 'remote', 'get-url', 'origin').toString('utf8').trim();
   if (![`https://github.com/${entry.canonical_repo}.git`, `https://github.com/${entry.canonical_repo}`, `git@github.com:${entry.canonical_repo}.git`].includes(origin)) throw new Error('SOURCE_REPO_MISMATCH');
   if (!/^[a-f0-9]{40}$/.test(entry.commit) || git(root, 'rev-parse', `${entry.commit}^{commit}`).toString('utf8').trim() !== entry.commit) throw new Error('SOURCE_PIN_MISMATCH');
@@ -46,6 +55,11 @@ function sourceBytes(entry, root) {
     const blob = git(root, 'rev-parse', `${entry.commit}:${file.path}`).toString('utf8').trim();
     const bytes = git(root, 'show', `${entry.commit}:${file.path}`);
     if (blob !== file.blob_git_sha || sha(bytes) !== file.sha256) throw new Error('SOURCE_BYTES_MISMATCH');
+    const filePath = realpathSync(join(checkout, file.path));
+    const within = relative(checkout, filePath);
+    if (!within || within.startsWith('..') || isAbsolute(within)) throw new Error('SOURCE_PATH_MISMATCH');
+    const worktree = readFileSync(filePath);
+    verifyWorktreeBytes(worktree, bytes);
     files[file.path] = bytes;
   }
   return files;

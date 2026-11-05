@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "asteroides/brand-context/v1",
+  "type": "object",
+  "required": ["schema", "brand_ref", "as_of", "source", "claims", "assets", "unknowns", "limitations", "native_snapshot_digest", "snapshot_digest"],
+  "properties": {
+    "schema": { "const": "asteroides/brand-context/v1" },
+    "brand_ref": { "type": "string", "pattern": "^brand://[a-z][a-z0-9-]*$" },
+    "as_of": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$" },
+    "source": {
+      "type": "object",
+      "required": ["repo", "commit", "profile", "source_files"],
+      "properties": {
+        "repo": { "type": "string" },
+        "commit": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+        "profile": { "type": "string" },
+        "source_files": { "type": "array", "minItems": 1, "items": { "type": "object", "required": ["path", "git_blob_sha", "sha256"] } }
+      },
+      "additionalProperties": false
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["claim_id", "section", "original_field", "value", "knowledge_status", "source_ref", "source_uri", "approval_ref", "approval_scope", "conditions", "restrictions", "valid_at", "expires_at", "provenance", "scope_verification"],
+        "properties": {
+          "claim_id": { "type": "string" },
+          "section": { "type": "string" },
+          "original_field": { "type": "string" },
+          "value": { "type": ["string", "array", "object"] },
+          "knowledge_status": { "enum": ["approved", "proposed", "unknown", "deprecated", "archived"] },
+          "source_ref": { "type": "string" },
+          "source_uri": { "type": "string" },
+          "approval_ref": { "type": ["string", "null"] },
+          "approval_scope": { "type": ["array", "string"] },
+          "conditions": { "type": "array", "items": { "type": "string" } },
+          "restrictions": { "type": "array", "items": { "type": "string" } },
+          "valid_at": { "type": ["string", "null"] },
+          "expires_at": { "type": ["string", "null"] },
+          "provenance": { "type": "object" },
+          "scope_verification": { "enum": ["SOURCE_SCOPED", "SCOPE_NOT_MACHINE_VERIFIABLE"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "assets": { "type": "array", "items": { "type": "object" } },
+    "unknowns": { "type": "array", "items": { "type": "object" } },
+    "limitations": { "type": "array", "items": { "type": "string" } },
+    "native_snapshot_digest": { "type": ["string", "null"] },
+    "snapshot_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" }
+  },
+  "additionalProperties": false
+}

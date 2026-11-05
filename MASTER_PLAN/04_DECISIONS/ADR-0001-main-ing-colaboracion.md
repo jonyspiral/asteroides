@@ -41,6 +41,17 @@ Un rector puede comenzar con un solo agente MAIN/ING. No se obliga a dividir tra
 
 **Canal de recepción:** un mensaje en GitHub queda disponible para los agentes que vuelvan a leer el rector; no se presupone que Claude, Codex u otro proceso esté conectado continuamente ni que reciba notificaciones en tiempo real.
 
+## Enmienda OWNER 2026-11-05 — chat nativo y dependencia MAIN → ING
+
+El OWNER aclaró que **PC CODEX ING, ASTEROIDES-EXECUTOR ING, ASTEROIDES-GROWTH ING y KOI2 ING ya colaboran autónomamente en Work usando chat**, y aprobó formalizar esa arquitectura. Esta enmienda **precisa la sección original** sin invalidar su gobierno:
+
+1. **MAIN** de cada dominio opera en **ChatGPT** y asigna al **ING** correspondiente mediante la capacidad nativa de **Work** cuando está disponible. La relación funcional se declara en [AGENT_REGISTRY.yml](../02_MVP/AGENT_REGISTRY.yml) como `reports_to`; es enrutamiento de responsabilidad, no identidad autenticada ni autoridad.
+2. **ING** opera en **Work**, trabaja dentro del GOAL y coordina con otros **ING por chat nativo** sin intermediación del OWNER. Se conserva `ROLE_ID`; las sesiones/aliases no se inventan y las conversaciones inactivas no se consideran despertadas por un mensaje.
+3. **GitHub es la fuente de verdad durable** para WUs, código, PRs, decisiones, aprobaciones, receipts y resultados que deban permanecer; **no** es una obligación de transportar allí cada intercambio operativo de chat. La línea `Comunicación: GitHub` en plantillas rectoras debe interpretarse como canal de **evidencia durable**, no como exclusividad ni prohibición de Work-chat.
+4. **Costo mínimo:** usar identidad ya declarada sin volver a leer el registry por tarea, sin cabeceras repetidas, polling, bots de reenvío, MCPs, schedulers ni nuevas WUs por delegación rutinaria. Esta enmienda modifica sólo documentación/registro, no las reglas de autorización, claim, validación, release o deploy.
+
+**Referencias operativas:** [Protocolo de hilos](../02_MVP/THREAD_IDENTITY.md) y [mini prompts](../02_MVP/THREAD_STARTER.md). La comunicación nativa de Work y su capacidad de activación dependen de la sesión/entorno disponible; un enlace GitHub por sí solo no dispara un agente.
+
 ## Límites de esta decisión
 
 - No modifica el contrato de Project Control ni su runtime; PC ING conserva el diseño técnico de PC.

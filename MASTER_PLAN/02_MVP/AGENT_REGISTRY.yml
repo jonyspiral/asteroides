@@ -1,50 +1,128 @@
-# ASTEROIDES — identidades operativas de roles (no identidades de seguridad)
-# Registro público. No agregar URLs privadas de ChatGPT/Claude, secretos ni tokens.
+# ASTEROIDES — registro de roles operativos; NO es un mecanismo de autenticación
+# Repositorio público: sin URL privada de hilos, credenciales, tokens ni identificadores internos.
 schema: "asteroides/agent-registry/v1"
-updated: "2026-10-26"
+updated: "2026-11-05"
 rector: "jonyspiral/asteroides#1"
 decision: "MASTER_PLAN/04_DECISIONS/ADR-0001-main-ing-colaboracion.md"
-binding_semantics: "ROLE_ID define función; THREAD_REF es alias lógico propuesto, NO ID nativo ni autenticación"
+binding_semantics: "role_id identifica la función; thread_ref es alias candidato, no ID nativo"
+reporting_semantics: "reports_to indica dependencia funcional, no identidad ni autorización"
+coordination_semantics: "chat nativo ChatGPT/Work para coordinar mientras las sesiones estén activas; GitHub para fuente durable"
+usage: "consultar sólo al crear/cambiar hilo o si falta relación; no leer por tarea"
+
 roles:
   - role_id: "AST-MVP-MAIN"
     function: "Arquitectura y coherencia global del ecosistema Asteroides"
     rector_ref: "jonyspiral/asteroides#1"
+    reports_to: "OWNER"
+    execution_environment: "ChatGPT"
+    coordination: "native_chat_to_work"
     responsible_for: "Alineación Core, Harness, PC, Executor, plataformas y subproductos"
     platform_declared: "ChatGPT"
     model_declared: null
     threads:
       - thread_ref: "AST-MVP-MAIN-01"
         binding_status: "pending_confirmation"
-        note: "Alias propuesto para el hilo ASTEROIDES MVP; no contiene URL de conversación"
+        note: "Alias lógico propuesto, no URL ni ID verificado"
+
+  - role_id: "PC-MAIN"
+    function: "Dirección de Project Control"
+    rector_ref: "jonyspiral/project-control-mcp#1"
+    reports_to: "OWNER"
+    execution_environment: "ChatGPT"
+    coordination: "native_chat_to_work"
+    threads: []
 
   - role_id: "PC-ING"
-    function: "Ingeniería e implementación de Project Control MCP"
+    function: "Ingeniería Project Control — hilo Claude previamente declarado"
     rector_ref: "jonyspiral/project-control-mcp#183"
     master_ref: "jonyspiral/project-control-mcp#1"
-    responsible_for: "Código, pruebas, releases y evidencia técnica de PC dentro de autorización"
+    reports_to: "PC-MAIN"
+    execution_environment: "Claude (modalidad de hilo no confirmada)"
+    coordination: "native_chat_when_available"
+    responsible_for: "Código, pruebas y evidencia técnica PC dentro de autorización"
     platform_declared: "Claude"
-    model_declared: "Opus 5.5 (informado por OWNER)"
+    model_declared: "Opus 5.5 (declarado anteriormente)"
     threads:
       - thread_ref: "PC-ING-01"
         binding_status: "pending_confirmation"
-        note: "Alias propuesto, pendiente vinculación por el agente/hilo existente"
+        note: "No equiparar este alias con PC-CODEX-ING ni con un ID real de conversación"
+
+  - role_id: "PC-CODEX-ING"
+    function: "Ingeniero PC Codex que trabaja y colabora en Work"
+    rector_ref: "jonyspiral/project-control-mcp#183"
+    reports_to: "PC-MAIN"
+    execution_environment: "Work"
+    coordination: "native_work_chat"
+    model_declared: null
+    threads: []
+    note: "Identidad funcional aportada por OWNER; vínculo de sesión pendiente"
+
+  - role_id: "EXECUTOR-MAIN"
+    function: "Dirección de Asteroides Executor"
+    rector_ref: "jonyspiral/project-control-mcp#1"
+    product_repo: "jonyspiral/asteroides-executor"
+    reports_to: "OWNER"
+    execution_environment: "ChatGPT"
+    coordination: "native_chat_to_work"
+    threads: []
+
+  - role_id: "EXECUTOR-ING"
+    function: "Ingeniería Asteroides Executor en Work"
+    rector_ref: "jonyspiral/project-control-mcp#1"
+    product_repo: "jonyspiral/asteroides-executor"
+    reports_to: "EXECUTOR-MAIN"
+    execution_environment: "Work"
+    coordination: "native_work_chat"
+    model_declared: null
+    threads: []
+    note: "Denominado ASTEROIDES-EXECUTOR ING por OWNER; vínculo de sesión pendiente"
 
   - role_id: "GROWTH-MAIN"
     function: "Dirección integral de Asteroides Growth y sus ingenieros"
     rector_ref: "jonyspiral/asteroides-growth#1"
+    reports_to: "OWNER"
+    execution_environment: "ChatGPT"
+    coordination: "native_chat_to_work"
     responsible_for: "Priorización, delegación y aceptación de Growth"
-    platform_declared: null
-    model_declared: null
     threads:
       - thread_ref: "GROWTH-MAIN-01"
         binding_status: "pending_confirmation"
 
-  - role_id: "SERVER-MAIN"
-    function: "Dirección integral de Asteroides Server y su migración"
-    rector_ref: "jonyspiral/asteroides-server#1"
-    responsible_for: "Coordinar seguridad, migración, dependencias, ING y evidencias"
-    platform_declared: null
+  - role_id: "GROWTH-ING"
+    function: "Ingeniería Asteroides Growth en Work"
+    rector_ref: "jonyspiral/asteroides-growth#1"
+    reports_to: "GROWTH-MAIN"
+    execution_environment: "Work"
+    coordination: "native_work_chat"
     model_declared: null
+    threads: []
+    note: "Denominado ASTEROIDES-GROWTH ING por OWNER; vínculo de sesión pendiente"
+
+  - role_id: "KOI2-MAIN"
+    function: "Dirección técnica de KOI2"
+    rector_ref: "jonyspiral/koi2#143"
+    reports_to: "OWNER"
+    execution_environment: "ChatGPT"
+    coordination: "native_chat_to_work"
+    threads: []
+
+  - role_id: "KOI2-ING"
+    function: "Ingeniería KOI2 en Work"
+    rector_ref: "jonyspiral/koi2#143"
+    reports_to: "KOI2-MAIN"
+    execution_environment: "Work"
+    coordination: "native_work_chat"
+    model_declared: null
+    threads: []
+    note: "Colabora por chat con otros ingenieros Work; vínculo de sesión pendiente"
+
+  - role_id: "SERVER-MAIN"
+    function: "Dirección de infraestructura y migración Asteroides Server"
+    rector_ref: "jonyspiral/asteroides-server#1"
+    reports_to: "OWNER"
+    execution_environment: "ChatGPT"
+    coordination: "native_chat_to_work"
+    responsible_for: "Coordinar seguridad, migración, dependencias, ING y evidencias"
     threads:
       - thread_ref: "SERVER-MAIN-01"
         binding_status: "pending_confirmation"

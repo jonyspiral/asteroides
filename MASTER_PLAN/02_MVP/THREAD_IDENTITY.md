@@ -4,6 +4,20 @@
 - **Aclaración aprobada:** 05/11/2026: los MAIN coordinan desde ChatGPT; los ING trabajan y pueden colaborar entre sí mediante el **chat nativo de Work**, como ya ocurre en PC Codex, Executor, Growth y KOI2.
 - **Registro:** [AGENT_REGISTRY.yml](AGENT_REGISTRY.yml). No es una lista de IDs autenticados.
 
+## Entradas canónicas al crear una conversación
+
+| Entorno | Entrada efectiva al inicio | De dónde obtiene identidad |
+|---|---|---|
+| **ChatGPT** | **Instrucciones del Project** (o mensaje inicial si no están configuradas) | Puntero a `AGENT_REGISTRY.yml` para rol/relación y a `THREAD_STARTER.md` para declarar el alias una vez |
+| **Work** | `AGENTS.md` **del repositorio activo** (y Harness local si corresponde) | Puntero al mismo registro/protocolo global; adopción por repositorio, no herencia automática |
+| **Nuevo hilo sin identidad previa** | Starter de `THREAD_STARTER.md` usado **una vez** | `ROLE_ID` conocido + `THREAD_REF` lógico, nunca un ID inventado de plataforma |
+
+Un archivo versionado de GitHub **no actualiza por sí solo** las instrucciones de un ChatGPT Project, ni se propaga automáticamente a los `AGENTS.md` de otros repositorios. Cada entorno debe adoptar su **puntero mínimo** desde su entrada real. No copiar el registry a las WUs ni añadir consultas por tarea.
+
+Para nombrar un hilo: conservar `ROLE_ID` estable del registro (ej. `AST-MVP-MAIN`, `KOI2-MAIN`, `KOI2-ING`), y elegir `THREAD_REF` lógico con forma `ROLE_ID-NN` no ocupado (`-01` para el primero declarado). Alias y rol no equivalen a una vinculación autenticada. Un chat Work identificado sin alias no recibe un alias inventado.
+
+**Identidades declaradas en este alcance:** `AST-MVP-MAIN` y alias lógico `AST-MVP-MAIN-01` se corresponden con el registro y la función de este chat; el binding a ID nativo permanece pendiente. KOI2-MAIN declaró `KOI2-MAIN-01`; identificó el chat real KOI2 ING y comprobó su canal nativo, **sin** aportar alias público ni autorizar publicar vínculos privados.
+
 ## Identidad mínima (una sola vez por hilo)
 
 | Campo | Propósito |
@@ -17,6 +31,28 @@
 | `TASK_REF` | Work Unit real resuelta al comenzar una tarea ejecutable |
 
 **No equiparar `PC-ING` (hilo Claude previamente declarado) con `PC-CODEX-ING` (ingeniero Work).** Las dos referencias son operativas y responden a `PC-MAIN`. No inventar URLs, IDs nativos ni vinculación de una sesión.
+
+## Registro interno de la identidad (una vez, nunca por tarea)
+
+1. En el **primer mensaje de contexto** de la conversación declarar: `ROLE_ID`, `THREAD_REF` lógico, `RECTOR_REF`, `REPORTS_TO` y `EXECUTION_ENVIRONMENT`. Se puede usar el starter sin generar un archivo público.
+2. Si el entorno dispone de **un archivo de notas privado y ya existente para esa sesión**, registrar allí el mismo conjunto mínimo como identidad local; ejemplo de contenido, **no archivo nuevo exigido**:
+
+```json
+{
+  "schema": "asteroides/thread-identity-local/v1",
+  "role_id": "KOI2-MAIN",
+  "thread_ref": "KOI2-MAIN-01",
+  "rector_ref": "jonyspiral/koi2#143",
+  "reports_to": "OWNER",
+  "execution_environment": "ChatGPT",
+  "native_binding": "not_published"
+}
+```
+
+3. Si **no existe** un archivo privado accesible (incluido ChatGPT sin filesystem expuesto), el contexto del chat y su starter son suficientes. No inventar un directorio obligatorio, un ID de sesión, una API ni un mecanismo de sincronización. No guardar IDs/URLs privados en GitHub, `AGENTS.md`, `.harness/current-task.md`, Issues o PR.
+4. Al reemplazar conversación/modelo, conservar el rol si la función no cambia, asignar un alias lógico nuevo si es otro hilo y volver a resolver sólo el `TASK_REF` de WU activa. No duplicar instrucciones ni revalidar identidad en cada trabajo.
+
+El registro público describe roles y alias **sin autenticar ni vincular sesiones**; el propio hilo conserva el contexto interno cuando el entorno lo permite. `pending_confirmation` significa que falta esa vinculación nativa, no que el rol funcional sea desconocido.
 
 ## Al comenzar una tarea (sin pasos adicionales)
 

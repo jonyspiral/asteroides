@@ -1,7 +1,7 @@
 # ASTEROIDES — registro de roles operativos; NO es un mecanismo de autenticación
 # Repositorio público: sin URL privada de hilos, credenciales, tokens ni identificadores internos.
 schema: "asteroides/agent-registry/v1"
-updated: "2026-11-05"
+updated: "2026-11-11"
 rector: "jonyspiral/asteroides#1"
 decision: "MASTER_PLAN/04_DECISIONS/ADR-0001-main-ing-colaboracion.md"
 binding_semantics: "role_id identifica la función; thread_ref es alias candidato, no ID nativo"
@@ -115,6 +115,20 @@ roles:
     model_declared: null
     threads: []
     note: "Colabora por chat con otros ingenieros Work; vínculo de sesión pendiente"
+
+  - role_id: "KOI2-ING-CLAUDE"
+    function: "Ingeniería KOI2 en Claude: revisión de PRs, pruebas aisladas, releases gobernados y bloques OWNER"
+    rector_ref: "jonyspiral/koi2#143"
+    reports_to: "KOI2-MAIN"
+    execution_environment: "Claude (proyecto KOI2 ING Claude)"
+    coordination: "github_issues_and_owner_chat"
+    responsible_for: "Revisar bytes de PRs de KOI2-ING, ejecutar pruebas en entornos efímeros, despachar releases sólo con orden OWNER exacta y preparar bloques de lectura/escritura para la terminal OWNER"
+    platform_declared: "Claude"
+    model_declared: "Opus 5.5 (declarado por OWNER)"
+    threads:
+      - thread_ref: "KOI2-ING-CLAUDE-01"
+        binding_status: "pending_confirmation"
+        note: "No equiparar con KOI2-ING (Codex en Work) ni con PC-ING; hereda el trabajo KOI2 que PC-ING-01 hizo hasta 2026-11-11, sin heredar permisos"
 
   - role_id: "SERVER-MAIN"
     function: "Dirección de infraestructura y migración Asteroides Server"

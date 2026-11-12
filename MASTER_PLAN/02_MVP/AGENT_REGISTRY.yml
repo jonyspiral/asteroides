@@ -22,7 +22,7 @@ roles:
     threads:
       - thread_ref: "AST-MVP-MAIN-01"
         binding_status: "pending_confirmation"
-        note: "Alias lógico propuesto, no URL ni ID verificado"
+        note: "ROLE_ID AST-MVP-MAIN y alias lógico AST-MVP-MAIN-01 verificados en este proyecto; vínculo con conversación nativa aún no acreditado"
 
   - role_id: "PC-MAIN"
     function: "Dirección de Project Control"
@@ -104,7 +104,10 @@ roles:
     reports_to: "OWNER"
     execution_environment: "ChatGPT"
     coordination: "native_chat_to_work"
-    threads: []
+    threads:
+      - thread_ref: "KOI2-MAIN-01"
+        binding_status: "pending_confirmation"
+        note: "Alias lógico declarado por KOI2-MAIN; no acredita ni publica ID o URL nativa"
 
   - role_id: "KOI2-ING"
     function: "Ingeniería KOI2 en Work"
@@ -114,7 +117,7 @@ roles:
     coordination: "native_work_chat"
     model_declared: null
     threads: []
-    note: "Colabora por chat con otros ingenieros Work; vínculo de sesión pendiente"
+    note: "KOI2-MAIN confirmó chat real KOI2 ING y canal nativo; alias lógico y binding de sesión no publicados"
 
   - role_id: "KOI2-ING-CLAUDE"
     function: "Ingeniería KOI2 en Claude: revisión de PRs, pruebas aisladas, releases gobernados y bloques OWNER"

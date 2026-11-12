@@ -1,6 +1,20 @@
 # ASTEROIDES — mini prompts para identificar hilos
 
-Estos prompts se usan **una vez** al crear/cambiar de hilo o rol. Cuando la identidad ya está declarada, no se vuelve a cargar el registro ni se repite la cabecera en cada tarea. Los `THREAD_REF` son aliases propuestos y quedan pendientes de confirmación en [AGENT_REGISTRY.yml](AGENT_REGISTRY.yml), **no** IDs nativos de la plataforma.
+Estos prompts se usan **una vez** al crear/cambiar de hilo o rol. Cuando la identidad ya está declarada, no se vuelve a cargar el registro ni se repite la cabecera en cada tarea. Los `THREAD_REF` son alias lógicos; `AST-MVP-MAIN-01` es el alias del rol AST-MVP-MAIN y `KOI2-MAIN-01` fue declarado por KOI2-MAIN. La vinculación con una sesión nativa permanece pendiente en el [AGENT_REGISTRY.yml](AGENT_REGISTRY.yml). **No** son IDs de plataforma.
+
+## Arranque del entorno: un único puntero, no un prompt por tarea
+
+- **ChatGPT:** incorporar una vez en las **instrucciones del Project** (configuración distinta de este repo) la siguiente línea de entrada; si no está configurada, colocarla como **primer mensaje del hilo**. La edición de GitHub no la instala automáticamente en ChatGPT:
+
+```text
+ASTEROIDES · BOOTSTRAP DE IDENTIDAD (sólo al crear/cambiar chat):
+Si el hilo ya declara ROLE_ID y THREAD_REF lógico, reutilizalos sin releer. Si faltan, consultá una vez AGENT_REGISTRY.yml y THREAD_IDENTITY.md del repo jonyspiral/asteroides y elegí el starter correspondiente de THREAD_STARTER.md. Declaralos en el contexto inicial; THREAD_REF no es ID nativo. TASK_REF se resuelve sólo con una WU real. No guardes enlaces privados ni tomes identidad como autorización.
+```
+
+- **Work:** el punto de entrada es `AGENTS.md` del repo sobre el que trabaja la sesión. Si ya declara identidad, reutilizarla; si no, seguir el puntero a los mismos tres archivos. Los repos consumidores requieren **su propia adopción** de ese puntero en `AGENTS.md`, no se asume que leen automáticamente el de Asteroides.
+- **Archivo interno:** cuando el entorno ya dispone de notas privadas de sesión, registrar allí una sola vez `ROLE_ID`, `THREAD_REF`, `RECTOR_REF`, `REPORTS_TO` y `EXECUTION_ENVIRONMENT` siguiendo [THREAD_IDENTITY.md](THREAD_IDENTITY.md). Si no existe tal soporte, basta el mensaje inicial. Nunca crear una WU o un archivo versionado por conversación.
+
+El `THREAD_REF` es alias humano `ROLE_ID-NN`, no URL ni ID de plataforma.
 
 ## Plantilla mínima (adaptar sólo los campos)
 
@@ -69,7 +83,7 @@ RECTOR=jonyspiral/project-control-mcp#1 | DIRIGÍ a PC-ING / PC-CODEX-ING por Wo
 ROLE_ID=EXECUTOR-MAIN | REPORTS_TO=OWNER | ENV=ChatGPT | COORDINATION=native_chat_to_work
 RECTOR=jonyspiral/project-control-mcp#1 | PROYECTO=jonyspiral/asteroides-executor | DIRIGÍ Executor ING por Work.
 
-ROLE_ID=KOI2-MAIN | REPORTS_TO=OWNER | ENV=ChatGPT | COORDINATION=native_chat_to_work
+ROLE_ID=KOI2-MAIN | THREAD_REF=KOI2-MAIN-01 | REPORTS_TO=OWNER | ENV=ChatGPT | COORDINATION=native_chat_to_work
 RECTOR=jonyspiral/koi2#143 | DIRIGÍ KOI2 ING por Work, sin autorizar escritura o deploy implícitos.
 
 ROLE_ID=PC-CODEX-ING | REPORTS_TO=PC-MAIN | ENV=Work | COORDINATION=native_work_chat

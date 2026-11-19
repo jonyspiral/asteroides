@@ -1,7 +1,7 @@
 # ASTEROIDES — registro de roles operativos; NO es un mecanismo de autenticación
 # Repositorio público: sin URL privada de hilos, credenciales, tokens ni identificadores internos.
 schema: "asteroides/agent-registry/v1"
-updated: "2026-11-11"
+updated: "2026-11-19"
 rector: "jonyspiral/asteroides#1"
 decision: "MASTER_PLAN/04_DECISIONS/ADR-0001-main-ing-colaboracion.md"
 binding_semantics: "role_id identifica la función; thread_ref es alias candidato, no ID nativo"
@@ -25,30 +25,32 @@ roles:
         note: "Alias lógico propuesto, no URL ni ID verificado"
 
   - role_id: "PC-MAIN"
-    function: "Dirección de Project Control"
+    function: "Dirección de Project Control: arquitecto y revisor (ADR 0020)"
     rector_ref: "jonyspiral/project-control-mcp#1"
+    decision: "jonyspiral/project-control-mcp/docs/adr/0020-pc-nucleo-y-organizacion-liviana.md"
     reports_to: "OWNER"
-    execution_environment: "ChatGPT"
-    coordination: "native_chat_to_work"
-    threads: []
+    execution_environment: "Claude (proyecto PROJECT CONTROL MCP, nube)"
+    coordination: "github_issues_and_owner_chat"
+    responsible_for: "Alcance y carril L0/L1/L2, revisión contra la intención, ESTADO ACTUAL y órdenes OWNER listas; escribe sólo si el OWNER lo pide (revisa entonces el OWNER o su designado)"
+    platform_declared: "Claude"
+    model_declared: "Opus, esfuerzo alto (declarado por OWNER)"
+    absorbs: ["PC-ING"]
+    threads:
+      - thread_ref: "PC-MAIN-CLAUDE-01"
+        binding_status: "pending_confirmation"
+        note: "Hilo nuevo en el proyecto PROJECT CONTROL MCP; reemplaza el MAIN en ChatGPT al aceptarse ADR 0020"
 
   - role_id: "PC-ING"
-    function: "Ingeniería Project Control — hilo Claude previamente declarado"
-    rector_ref: "jonyspiral/project-control-mcp#183"
-    master_ref: "jonyspiral/project-control-mcp#1"
+    status: "merged_into_PC-MAIN"
+    function: "Histórico: ingeniería Project Control en Claude, fusionada en PC-MAIN por ADR 0020"
     reports_to: "PC-MAIN"
-    execution_environment: "Claude (modalidad de hilo no confirmada)"
-    coordination: "native_chat_when_available"
-    responsible_for: "Código, pruebas y evidencia técnica PC dentro de autorización"
-    platform_declared: "Claude"
-    model_declared: "Opus 5.5 (declarado anteriormente)"
     threads:
       - thread_ref: "PC-ING-01"
-        binding_status: "pending_confirmation"
-        note: "No equiparar este alias con PC-CODEX-ING ni con un ID real de conversación"
+        binding_status: "retired"
+        note: "Su trabajo (KOI2, TLS #57, reviews) continúa en PC-MAIN y KOI2-ING-CLAUDE; no hereda permisos"
 
   - role_id: "PC-CODEX-ING"
-    function: "Ingeniero PC Codex que trabaja y colabora en Work"
+    function: "Escritor de PC o segunda opinión a pedido (ADR 0020), en Work; prompts con presupuesto de salida"
     rector_ref: "jonyspiral/project-control-mcp#183"
     reports_to: "PC-MAIN"
     execution_environment: "Work"

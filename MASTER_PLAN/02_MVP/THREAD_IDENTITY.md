@@ -16,7 +16,7 @@
 | `RECTOR_REF` | Rector de gobierno del proyecto |
 | `TASK_REF` | Work Unit real resuelta al comenzar una tarea ejecutable |
 
-**No equiparar `PC-ING` (hilo Claude previamente declarado) con `PC-CODEX-ING` (ingeniero Work).** Las dos referencias son operativas y responden a `PC-MAIN`. No inventar URLs, IDs nativos ni vinculación de una sesión.
+**ADR 0020 (Project Control):** `PC-MAIN` corre en Claude como arquitecto y revisor y absorbe a `PC-ING`. `PC-CODEX-ING` es escritor o segunda opinión a pedido. No inventar URLs, IDs nativos ni vinculación de una sesión.
 
 ## Al comenzar una tarea (sin pasos adicionales)
 
